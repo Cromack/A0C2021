@@ -55,20 +55,23 @@ func createBingoBoards(values []string){
 }
 
 func checkboards(value string){
-  for _, board := range boards{
+  for index, board := range boards{
+    if board.solved == false{
     for i, row := range board.boardValues{
       for j, boardValue := range row{
         if boardValue == value{
           board.boardValues[i][j] = "X"
           winValue, _ := strconv.Atoi(value)
-          checkWin(board.boardValues, row, j, winValue)
+          checkWin(&board, row, j, winValue)
+          boards[index] = board
+        }
         }
       }
     }
   }
 }
 
-func checkWin(boardToCheck [5][]string, row []string, index int, winningValue int){
+func checkWin(boardToCheck *bingoBoard, row []string, index int, winningValue int){
 
     rowWin := 0
     columnWin := 0
@@ -78,19 +81,21 @@ func checkWin(boardToCheck [5][]string, row []string, index int, winningValue in
       }
     }
     if rowWin == 5{
-      fmt.Println("Voitto")
-      fmt.Println(boardToCheck)
-      calculateWin(boardToCheck, winningValue)
+      //fmt.Println("Voitto")
+      //fmt.Println(boardToCheck)
+      boardToCheck.solved = true
+      calculateWin(boardToCheck.boardValues, winningValue)
     }
-    for _, row := range boardToCheck{
+    for _, row := range boardToCheck.boardValues{
       if row[index] == "X"{
         columnWin ++
       }
     }
     if columnWin == 5{
-      fmt.Println("Voitto")
-      fmt.Println(boardToCheck)
-      calculateWin(boardToCheck, winningValue)
+      //fmt.Println("Voitto")
+      //fmt.Println(boardToCheck)
+      boardToCheck.solved = true
+      calculateWin(boardToCheck.boardValues, winningValue)
     }
 }
 
@@ -105,5 +110,4 @@ func calculateWin(boardToCheck [5][]string, winningValue int){
     }
   }
   fmt.Println(winSum * winningValue)
-  os.Exit(3)
 }
