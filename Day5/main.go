@@ -17,8 +17,8 @@ func main() {
   for _, input := range parsedData{
     mapLines(strings.Split(input," "))
   }
-  fmt.Println(lineMap)
   getDangerPoints()
+	//fmt.Println(lineMap)
 }
 
 func parseData() []string{
@@ -45,8 +45,46 @@ func mapLines(input []string){
       }
     }
   }else{
-    //Toteutus diagonal lineille
-    //Normicase menee alkuperäisellä functiolla ja coordinaattien järjestyksen vaihdolla, mutta on myös case jossa joko X tai y pienenee
+
+
+		if startingpoint.x > endingpoint.x{
+	    temp := startingpoint
+	    startingpoint = endingpoint
+	    endingpoint = temp
+		}
+		//fmt.Println(startingpoint,endingpoint)
+			if startingpoint.y <= endingpoint.y{
+				x := startingpoint.x
+				y := startingpoint.y
+				for x != endingpoint.x + 1 && y != endingpoint.y + 1{
+ 					 coordinatePoint := strconv.Itoa(x) + "," + strconv.Itoa(y)
+ 					 _, ok := lineMap[coordinatePoint]
+ 					 if ok{
+ 						 lineMap[coordinatePoint] = lineMap[coordinatePoint] + 1
+ 					 }else{
+ 						 lineMap[coordinatePoint] = 1
+ 					 }
+ 					 x++
+ 					 y++
+ 			 }
+      }else if startingpoint.y > endingpoint.y{
+				x := startingpoint.x
+				y := startingpoint.y
+				for x != endingpoint.x+1 && y != endingpoint.y-1{
+					//fmt.Println(x,y)
+						coordinatePoint := strconv.Itoa(x) + "," + strconv.Itoa(y)
+		        _, ok := lineMap[coordinatePoint]
+		        if ok{
+		          lineMap[coordinatePoint] = lineMap[coordinatePoint] + 1
+		        }else{
+		          lineMap[coordinatePoint] = 1
+						}
+						x++
+						y--
+				}
+
+			}
+
   }
 }
 
